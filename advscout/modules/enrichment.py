@@ -1,18 +1,18 @@
 """
 Company Enrichment Module
 
-Uses GPT to analyze and enrich company data with insights about business model,
-market positioning, technology stack, and growth potential.
+Uses multiple AI providers (OpenAI, OpenRouter) to analyze and enrich company data 
+with insights about business model, market positioning, technology stack, and growth potential.
 """
 
 import json
 import time
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
-import openai
 from ..core.config import config
 from ..core.logger import get_logger, log_execution_time, log_error_with_context
 from ..core.utils import DataProcessor, CacheManager, APIError
+from ..core.ai_providers import ai_provider, TaskType
 
 logger = get_logger(__name__)
 
@@ -32,25 +32,18 @@ class EnrichmentResult:
     processing_time: float
 
 class CompanyEnrichment:
-    """GPT-powered company enrichment engine"""
+    """Multi-provider AI company enrichment engine"""
     
-    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-4"):
+    def __init__(self, preferred_model: Optional[str] = None, max_cost: Optional[float] = None):
         """Initialize enrichment engine
         
         Args:
-            api_key: OpenAI API key
-            model: GPT model to use
+            preferred_model: Preferred AI model to use (optional)
+            max_cost: Maximum cost per analysis (optional)
         """
-        self.api_key = api_key or config.get("openai_api_key")
-        self.model = model or config.get("gpt_model", "gpt-4")
-        self.max_tokens = config.get("max_tokens", 2000)
-        self.temperature = config.get("temperature", 0.3)
-        
-        # Initialize OpenAI client
-        if self.api_key:
-            openai.api_key = self.api_key
-        else:
-            raise ValueError("OpenAI API key is required")
+        self.preferred_model = preferred_model
+        self.max_cost = max_cost or config.get("max_ai_cost_per_analysis", 0.10)
+        self.ai_provider = ai_provider
         
         # Initialize cache
         cache_dir = config.get("cache_dir", "data/cache")
@@ -63,7 +56,7 @@ class CompanyEnrichment:
         # Data processor
         self.data_processor = DataProcessor()
         
-        logger.info(f"Initialized CompanyEnrichment with model: {self.model}")
+        logger.info(f"Initialized CompanyEnrichment with AI provider support")
     
     @log_execution_time
     def enrich_company(self, company_data: Dict) -> EnrichmentResult:
@@ -82,7 +75,7 @@ class CompanyEnrichment:
         
         try:
             # Check cache first
-            cache_key = f"enrichment_{company_name}_{self.model}"
+            cache_key = f"enrichment_{company_name}_{self.preferred_model or 'auto'}"
             cached_result = self.cache.get(cache_key)
             
             if cached_result:
@@ -95,11 +88,11 @@ class CompanyEnrichment:
             # Generate enrichment prompt
             prompt = self._create_enrichment_prompt(context)
             
-            # Get GPT analysis
-            gpt_analysis = self._get_gpt_analysis(prompt)
+            # Get AI analysis
+            ai_analysis = self._get_ai_analysis(prompt)
             
             # Parse and structure results
-            enrichment_result = self._parse_gpt_response(gpt_analysis, company_name)
+            enrichment_result = self._parse_ai_response(ai_analysis, company_name)
             
             # Add processing time
             enrichment_result.processing_time = time.time() - start_time
@@ -114,7 +107,7 @@ class CompanyEnrichment:
             log_error_with_context(e, {
                 'company': company_name,
                 'module': 'enrichment',
-                'model': self.model
+                'preferred_model': self.preferred_model or 'auto'
             })
             raise
     
@@ -205,38 +198,37 @@ Provide specific, actionable insights based on the available information.
 """
         return prompt
     
-    def _get_gpt_analysis(self, prompt: str) -> Dict:
-        """Get analysis from GPT
+    def _get_ai_analysis(self, prompt: str) -> Dict:
+        """Get analysis from AI provider
         
         Args:
             prompt: Analysis prompt
             
         Returns:
-            GPT response
+            AI response
         """
         try:
-            response = openai.ChatCompletion.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are an expert venture capital analyst specializing in company evaluation and market analysis."},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=self.max_tokens,
-                temperature=self.temperature,
-                response_format={"type": "json_object"}
+            system_prompt = "You are an expert venture capital analyst specializing in company evaluation and market analysis."
+            
+            response = self.ai_provider.complete(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                task_type=TaskType.ENRICHMENT,
+                model_name=self.preferred_model,
+                max_cost=self.max_cost,
+                response_format="json"
             )
             
-            content = response.choices[0].message.content
-            return json.loads(content)
+            return json.loads(response.content)
             
         except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse GPT response as JSON: {e}")
-            raise APIError("Invalid JSON response from GPT")
+            logger.error(f"Failed to parse AI response as JSON: {e}")
+            raise APIError("Invalid JSON response from AI")
         except Exception as e:
-            logger.error(f"GPT API call failed: {e}")
-            raise APIError(f"GPT API error: {str(e)}")
+            logger.error(f"AI API call failed: {e}")
+            raise APIError(f"AI API error: {str(e)}")
     
-    def _parse_gpt_response(self, gpt_response: Dict, company_name: str) -> EnrichmentResult:
+    def _parse_ai_response(self, ai_response: Dict, company_name: str) -> EnrichmentResult:
         """Parse GPT response into structured result
         
         Args:
