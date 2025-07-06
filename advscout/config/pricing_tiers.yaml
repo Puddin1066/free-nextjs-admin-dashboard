@@ -1,0 +1,321 @@
+# ADVScout Pricing Tiers Configuration
+# Defines the different pricing tiers and their capabilities
+
+pricing_tiers:
+  # Free Tier - Demo and proof of concept
+  free:
+    name: "Free Tier"
+    description: "Basic company intelligence using free APIs and OpenRouter AI"
+    monthly_cost: 25  # OpenRouter AI costs only
+    max_companies_per_month: 50
+    
+    apis:
+      github:
+        enabled: true
+        cost: 0
+        rate_limit: "5000/hour"
+        priority: 1
+        
+      sec_edgar:
+        enabled: true
+        cost: 0
+        rate_limit: "10/second"
+        priority: 2
+        
+      uspto:
+        enabled: true
+        cost: 0
+        rate_limit: "1000/day"
+        priority: 3
+        
+      newsapi:
+        enabled: true
+        cost: 0
+        rate_limit: "1000/day"
+        priority: 4
+        
+      nih_reporter:
+        enabled: true
+        cost: 0
+        rate_limit: "unlimited"
+        priority: 5
+        
+      openrouter:
+        enabled: true
+        cost: 25  # Monthly AI costs
+        models:
+          - "openai/gpt-4o-mini"
+          - "anthropic/claude-3-haiku"
+          - "meta-llama/llama-3-70b-instruct"
+          - "google/gemini-pro"
+        default_model: "openai/gpt-4o-mini"
+        max_cost_per_analysis: 0.50
+        
+    features:
+      - "Basic company intelligence (85% complete)"
+      - "AI-powered analysis and insights"
+      - "Technical assessment via GitHub"
+      - "Financial data for public companies"
+      - "Patent portfolio analysis"
+      - "Market sentiment tracking"
+      - "Markdown and CSV reports"
+      - "Decision maker identification"
+      - "Strategic recommendations"
+      
+    limitations:
+      - "Limited to 50 companies per month"
+      - "No real-time monitoring"
+      - "No custom integrations"
+      - "Standard support only"
+      
+  # Professional Tier - Client-committed mode
+  professional:
+    name: "Professional Tier"
+    description: "Enhanced intelligence with premium APIs and networking capabilities"
+    monthly_cost: 225  # Platform fee + API costs
+    max_companies_per_month: 200
+    
+    apis:
+      # All free tier APIs
+      github:
+        enabled: true
+        cost: 0
+        rate_limit: "5000/hour"
+        priority: 1
+        
+      sec_edgar:
+        enabled: true
+        cost: 0
+        rate_limit: "10/second"
+        priority: 2
+        
+      uspto:
+        enabled: true
+        cost: 0
+        rate_limit: "1000/day"
+        priority: 3
+        
+      newsapi:
+        enabled: true
+        cost: 0
+        rate_limit: "1000/day"
+        priority: 4
+        
+      nih_reporter:
+        enabled: true
+        cost: 0
+        rate_limit: "unlimited"
+        priority: 5
+        
+      openrouter:
+        enabled: true
+        cost: 25
+        models:
+          - "openai/gpt-4o-mini"
+          - "anthropic/claude-3-haiku"
+          - "meta-llama/llama-3-70b-instruct"
+          - "google/gemini-pro"
+        default_model: "openai/gpt-4o-mini"
+        max_cost_per_analysis: 0.75
+        
+      # Premium APIs
+      linkedin_sales_navigator:
+        enabled: true
+        cost: 80
+        rate_limit: "custom"
+        priority: 6
+        
+      crunchbase:
+        enabled: true
+        cost: 29
+        rate_limit: "1000/month"
+        priority: 7
+        
+      clearbit:
+        enabled: true
+        cost: 99
+        rate_limit: "1000/month"
+        priority: 8
+        
+    features:
+      - "All free tier features"
+      - "Direct decision maker contacts"
+      - "Network pathway mapping"
+      - "Funding intelligence"
+      - "Employee growth tracking"
+      - "Contact enrichment"
+      - "95% complete intelligence profiles"
+      - "Batch processing"
+      - "Priority support"
+      
+    limitations:
+      - "Limited to 200 companies per month"
+      - "No real-time monitoring"
+      - "Standard integrations only"
+      
+  # Enterprise Tier - Full intelligence mode
+  enterprise:
+    name: "Enterprise Tier"
+    description: "Complete intelligence platform with real-time monitoring and custom integrations"
+    monthly_cost: 750  # Full platform access
+    max_companies_per_month: 500
+    
+    apis:
+      # All professional tier APIs
+      github:
+        enabled: true
+        cost: 0
+        rate_limit: "5000/hour"
+        priority: 1
+        
+      sec_edgar:
+        enabled: true
+        cost: 0
+        rate_limit: "10/second"
+        priority: 2
+        
+      uspto:
+        enabled: true
+        cost: 0
+        rate_limit: "1000/day"
+        priority: 3
+        
+      newsapi:
+        enabled: true
+        cost: 0
+        rate_limit: "1000/day"
+        priority: 4
+        
+      nih_reporter:
+        enabled: true
+        cost: 0
+        rate_limit: "unlimited"
+        priority: 5
+        
+      openrouter:
+        enabled: true
+        cost: 50  # Higher usage allowance
+        models:
+          - "openai/gpt-4o-mini"
+          - "anthropic/claude-3-haiku"
+          - "meta-llama/llama-3-70b-instruct"
+          - "google/gemini-pro"
+          - "openai/gpt-4"
+        default_model: "openai/gpt-4o-mini"
+        max_cost_per_analysis: 1.00
+        
+      linkedin_sales_navigator:
+        enabled: true
+        cost: 80
+        rate_limit: "custom"
+        priority: 6
+        
+      crunchbase:
+        enabled: true
+        cost: 29
+        rate_limit: "1000/month"
+        priority: 7
+        
+      clearbit:
+        enabled: true
+        cost: 99
+        rate_limit: "1000/month"
+        priority: 8
+        
+      # Enterprise APIs
+      builtwith:
+        enabled: true
+        cost: 295
+        rate_limit: "10000/month"
+        priority: 9
+        
+      glassdoor:
+        enabled: true
+        cost: 99
+        rate_limit: "500/month"
+        priority: 10
+        
+      pitchbook:
+        enabled: false  # Requires custom negotiation
+        cost: 0
+        rate_limit: "custom"
+        priority: 11
+        
+    features:
+      - "All professional tier features"
+      - "Real-time monitoring"
+      - "Technology stack analysis"
+      - "Cultural fit assessment"
+      - "Automated contact enrichment"
+      - "Custom integrations"
+      - "Advanced analytics"
+      - "Unlimited companies"
+      - "Dedicated support"
+      - "Custom reporting"
+      - "API access"
+      - "White-label options"
+      
+    limitations:
+      - "Custom limits based on agreement"
+
+# Cost Analysis Templates
+cost_analysis:
+  contractor_margins:
+    free_tier:
+      monthly_cost: 25
+      client_fee: 225
+      contractor_profit: 200
+      profit_margin: 89%
+      
+    professional_tier:
+      monthly_cost: 233  # 25 + 80 + 29 + 99
+      client_fee: 450
+      contractor_profit: 217
+      profit_margin: 48%
+      
+    enterprise_tier:
+      monthly_cost: 652  # All APIs included
+      client_fee: 1200
+      contractor_profit: 548
+      profit_margin: 46%
+
+# Usage Tracking Configuration
+usage_tracking:
+  metrics:
+    - "companies_analyzed"
+    - "api_calls_made"
+    - "ai_cost_incurred"
+    - "reports_generated"
+    - "contacts_enriched"
+    
+  billing_cycle: "monthly"
+  overage_charges:
+    companies: 2.00  # Per company over limit
+    api_calls: 0.01  # Per API call over limit
+    ai_costs: 1.25   # 25% markup on AI costs
+    
+  notifications:
+    - threshold: 75%
+      message: "Approaching monthly limit"
+    - threshold: 90%
+      message: "Near monthly limit"
+    - threshold: 100%
+      message: "Monthly limit reached"
+
+# Client Onboarding Templates
+onboarding:
+  free_tier:
+    trial_period: 30  # days
+    companies_included: 10
+    setup_time: "1 hour"
+    
+  professional_tier:
+    trial_period: 14  # days
+    companies_included: 25
+    setup_time: "2 hours"
+    
+  enterprise_tier:
+    trial_period: 30  # days
+    companies_included: 50
+    setup_time: "4 hours"
+    custom_setup: true

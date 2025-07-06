@@ -1,0 +1,11 @@
+name,website,industry,description,founded_year,employee_count,revenue,funding,location
+"TechCorp Inc","https://techcorp.com","Software","AI-powered analytics platform for enterprise","2018","45","$2.5M","$10M","San Francisco, CA"
+"BioMed Solutions","https://biomedsolutions.com","Biotechnology","Novel drug discovery using machine learning","2020","25","$800K","$5M","Boston, MA"
+"FinanceAI","https://financeai.com","Fintech","Automated investment advisory services","2019","30","$1.8M","$8M","New York, NY"
+"GreenTech Energy","https://greentech-energy.com","Clean Energy","Solar panel optimization software","2021","15","$500K","$3M","Austin, TX"
+"HealthTech Systems","https://healthtech-sys.com","Healthcare","Electronic health records platform","2017","60","$4.2M","$15M","Seattle, WA"
+"DataFlow Analytics","https://dataflow.com","Data Analytics","Real-time data processing infrastructure","2019","35","$1.5M","$6M","Denver, CO"
+"CyberSecure Pro","https://cybersecure.pro","Cybersecurity","Advanced threat detection platform","2020","40","$2.1M","$12M","Palo Alto, CA"
+"AgriTech Innovations","https://agritech-innov.com","Agriculture","Precision farming IoT solutions","2018","20","$900K","$4M","Des Moines, IA"
+"EduLearn Platform","https://edulearn.com","EdTech","Personalized learning management system","2021","25","$600K","$2.5M","Chicago, IL"
+"LogiChain Solutions","https://logichain.com","Supply Chain","Blockchain-based supply chain tracking","2019","28","$1.3M","$7M","Atlanta, GA"
